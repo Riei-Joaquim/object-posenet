@@ -5,7 +5,7 @@ import time
 import numpy as np
 import torch
 from torch.autograd import Variable
-import tensorflow as tf
+#import tensorflow as tf
 from datasets.ycb.dataset import PoseDataset as PoseDataset_ycb
 from datasets.linemod.dataset import PoseDataset as PoseDataset_linemod
 from lib.network import PoseNet
@@ -29,22 +29,23 @@ parser.add_argument('--resume_posenet', type=str, default='', help='resume PoseN
 parser.add_argument('--nepoch', type=int, default=50, help='max number of epochs to train')
 opt = parser.parse_args()
 
+BASE_DIR_DOCKER = '/root/object-posenet/'
 
 def main():
     opt.manualSeed = random.randint(1, 10000)
     random.seed(opt.manualSeed)
     torch.manual_seed(opt.manualSeed)
     if opt.dataset == 'ycb':
-        opt.dataset_root = 'datasets/ycb/YCB_Video_Dataset'
+        opt.dataset_root = BASE_DIR_DOCKER + 'datasets/ycb/YCB_Video_Dataset'
         opt.num_objects = 21
         opt.num_points = 1000
-        opt.result_dir = 'results/ycb'
+        opt.result_dir = BASE_DIR_DOCKER + 'results/ycb'
         opt.repeat_epoch = 1
     elif opt.dataset == 'linemod':
-        opt.dataset_root = 'datasets/linemod/Linemod_preprocessed'
+        opt.dataset_root = BASE_DIR_DOCKER + 'datasets/linemod/Linemod_preprocessed'
         opt.num_objects = 13
         opt.num_points = 500
-        opt.result_dir = 'results/linemod'
+        opt.result_dir = BASE_DIR_DOCKER + 'results/linemod'
         opt.repeat_epoch = 10
     else:
         print('unknown dataset')
@@ -68,7 +69,7 @@ def main():
 
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
-    tb_writer = tf.summary.FileWriter(opt.result_dir)
+    #tb_writer = tf.summary.create_file_writer(opt.result_dir)
     os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu_id
     # network
     estimator = PoseNet(num_points=opt.num_points, num_obj=opt.num_objects, num_rot=opt.num_rot)
@@ -132,12 +133,12 @@ def main():
                     optimizer.step()
                     optimizer.zero_grad()
                     # write results to tensorboard
-                    summary = tf.Summary(value=[tf.Summary.Value(tag='learning_rate', simple_value=lr),
-                                                tf.Summary.Value(tag='loss', simple_value=train_loss_avg / opt.batch_size),
-                                                tf.Summary.Value(tag='loss_r', simple_value=train_loss_r_avg / opt.batch_size),
-                                                tf.Summary.Value(tag='loss_t', simple_value=train_loss_t_avg / opt.batch_size),
-                                                tf.Summary.Value(tag='loss_reg', simple_value=train_loss_reg_avg / opt.batch_size)])
-                    tb_writer.add_summary(summary, global_step)
+                    #summary = tf.Summary(value=[tf.Summary.Value(tag='learning_rate', simple_value=lr),
+                    #                            tf.Summary.Value(tag='loss', simple_value=train_loss_avg / opt.batch_size),
+                    #                            tf.Summary.Value(tag='loss_r', simple_value=train_loss_r_avg / opt.batch_size),
+                    #                            tf.Summary.Value(tag='loss_t', simple_value=train_loss_t_avg / opt.batch_size),
+                    #                            tf.Summary.Value(tag='loss_reg', simple_value=train_loss_reg_avg / opt.batch_size)])
+                    #tb_writer.add_summary(summary, global_step)
                     logger.info('Train time {0} Epoch {1} Batch {2} Frame {3} Avg_loss:{4:f}'.format(time.strftime("%Hh %Mm %Ss", 
                         time.gmtime(time.time()-st_time)), epoch, int(train_count/opt.batch_size), train_count, train_loss_avg/opt.batch_size))
                     train_loss_avg = 0.0
@@ -204,9 +205,9 @@ def main():
         logger.info('Test time {0} Epoch {1} TEST FINISH Avg dis: {2:f}, Accuracy: {3:f}'.format(time.strftime("%Hh %Mm %Ss",
             time.gmtime(time.time() - st_time)), epoch, test_dis, accuracy))
         # tensorboard
-        summary = tf.Summary(value=[tf.Summary.Value(tag='accuracy', simple_value=accuracy),
-                                    tf.Summary.Value(tag='test_dis', simple_value=test_dis)])
-        tb_writer.add_summary(summary, global_step)
+        #summary = tf.Summary(value=[tf.Summary.Value(tag='accuracy', simple_value=accuracy),
+        #                            tf.Summary.Value(tag='test_dis', simple_value=test_dis)])
+        #tb_writer.add_summary(summary, global_step)
         # save model
         if test_dis < best_test:
             best_test = test_dis

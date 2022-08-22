@@ -29,7 +29,7 @@ RUN pip3 --no-cache-dir install \
 
 RUN pip3 install cffi
 RUN pip3 install cffi_utils
-RUN pip3 install install tensorflow
+# RUN pip3 install install tensorflow
 # Tensorflow
 RUN pip3 install https://download.pytorch.org/whl/cu100/torch-1.0.1.post2-cp35-cp35m-linux_x86_64.whl && \
     pip3 install torchvision==0.2.2.post3
@@ -39,3 +39,7 @@ EXPOSE 6006
 
 # cd to home on login
 RUN echo "cd /root/object-posenet" >> /root/.bashrc
+
+#COPY entrypoint.sh /root/object-posenet/entrypoint.sh 
+#RUN chmod +x root/object-posenet/entrypoint.sh
+#ENTRYPOINT ["sh", "/root/object-posenet/entrypoint.sh"]
