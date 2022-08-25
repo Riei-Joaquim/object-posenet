@@ -5,7 +5,8 @@ import time
 import numpy as np
 import torch
 from torch.autograd import Variable
-#import tensorflow as tf
+import tensorboard
+import tensorboardX
 from datasets.ycb.dataset import PoseDataset as PoseDataset_ycb
 from datasets.linemod.dataset import PoseDataset as PoseDataset_linemod
 from lib.network import PoseNet
@@ -69,7 +70,7 @@ def main():
 
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
-    #tb_writer = tf.summary.create_file_writer(opt.result_dir)
+    #tb_writer = tb.summary.create_file_writer(opt.result_dir)
     os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu_id
     # network
     estimator = PoseNet(num_points=opt.num_points, num_obj=opt.num_objects, num_rot=opt.num_rot)

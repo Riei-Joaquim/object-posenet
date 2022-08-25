@@ -29,12 +29,13 @@ RUN pip3 --no-cache-dir install \
 
 RUN pip3 install cffi
 RUN pip3 install cffi_utils
-# RUN pip3 install install tensorflow
+
 # Tensorflow
 RUN pip3 install https://download.pytorch.org/whl/cu100/torch-1.0.1.post2-cp35-cp35m-linux_x86_64.whl && \
     pip3 install torchvision==0.2.2.post3
 
 # Expose port for TensorBoard
+RUN pip3 install tensorboard tensorboardx
 EXPOSE 6006
 
 # cd to home on login
