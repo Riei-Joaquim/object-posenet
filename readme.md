@@ -13,8 +13,6 @@ This is an implementation of the paper "Robust 6D Object Pose Estimation by Lear
 5. run ```sh run.sh``` to initialize docker
 6. run ```sh entrypoint.sh``` inside docker to startup setup
 
-### Dependencies 
-
 ## Dependencies
 * Python 3.6
 * PyTorch 1.0.1
