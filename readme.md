@@ -5,6 +5,16 @@
 This is an implementation of the paper "Robust 6D Object Pose Estimation by Learning RGB-D Features" ([arXiv](http://arxiv.org/abs/2003.00188)). Given an RGB-D image, our model predicts the 6D pose of each object in the scene.
 ![approach](assets/network.png)
 
+# Install and Using in Docker, better form.
+1. install docker with sudo acess
+2. install nvidia-docker2
+3. download datasets, unzip and move to /datasets/<datasetName>/
+4. run  ```sh build.sh``` to build docker
+5. run ```sh run.sh``` to initialize docker
+6. run ```sh entrypoint.sh``` inside docker to startup setup
+
+### Dependencies 
+
 ## Dependencies
 * Python 3.6
 * PyTorch 1.0.1
